@@ -1,0 +1,46 @@
+# !/bin/bash
+# CSI Installation – Création d’un compte de service dans VSphere adapté à l’utilisation du CPI et du CSI
+# Version : December 24, 2023
+# mariefdu45@gmail.com
+#
+# Création d’un utilisateur
+govc sso.user.create -p $csi_service_account_password $csi_service_account
+
+# Création des rôles
+govc role.create CNS-Datastore Datastore.FileManagement 
+govc role.create CNS-HOST-CONFIG-STORAGE Host.Config.Storage
+govc role.create CNS-SEARCH-AND-SPBM Cns.Searchable StorageProfile.View
+govc role.create CNS-VM VirtualMachine.Config.AddExistingDisk VirtualMachine.Config.AddRemoveDevice
+
+# Création des permissions pour l’utilisateur
+govc permissions.set -principal $csi_service_account@vsphere.local \
+    -role CNS-Datastore -propagate=false /$datacenter/datastore/$datastore
+
+govc permissions.set -principal $csi_service_account@vsphere.local \
+    -role CNS-HOST-CONFIG-STORAGE -propagate=false /$datacenter/host/$cluster
+
+
+for i in "${nodes[@]}"
+do
+    govc permissions.set -principal $csi_service_account@vsphere.local -role CNS-VM -propagate=false /$datacenter/vm/$nodes_folder/$i
+done
+
+
+govc permissions.set -principal $csi_service_account@vsphere.local \
+    -role CNS-SEARCH-AND-SPBM -propagate=false /
+
+govc permissions.set -principal $csi_service_account@vsphere.local \
+    -role ReadOnly -propagate=false /$datacenter/datastore/$datastore
+
+for i in "${hosts[@]}"
+do
+  govc permissions.set -principal $csi_service_account@vsphere.local \
+    -role ReadOnly -propagate=false /$datacenter/host/$cluster/$i.$domain_name
+done
+govc permissions.set -principal $csi_service_account@vsphere.local -role ReadOnly -propagate=false /$datacenter
+
+# enable disk.enableUUID
+for i in "${nodes[@]}"
+do
+    govc vm.change -vm /$datacenter/vm/$nodes_folder/$i -e="disk.enableUUID=1"
+done

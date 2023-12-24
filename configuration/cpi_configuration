@@ -1,0 +1,39 @@
+# !/bin/bash
+# CSI Installation – CPI configuration
+# Version : December 24, 2023
+# Author : mariefdu45@gmail.com
+#
+# vsphere-cloud-controller-manager.yaml download depending of kubernetes version
+wget https://raw.githubusercontent.com/kubernetes/cloud-provider-vsphere/release-$kubernetes_version/releases/v$kubernetes_version/vsphere-cloud-controller-manager.yaml
+
+# Extra configuration is deleted from the template
+sed -i '/1.2.3.4/d' vsphere-cloud-controller-manager.yaml
+sed -i '/could-be-a-tenant-label:/,/- mytenantdc/d' vsphere-cloud-controller-manager.yaml
+sed -i '/hreast/d' vsphere-cloud-controller-manager.yaml
+sed -i '/labels for regions and zones/,/zone:/d' vsphere-cloud-controller-manager.yaml
+sed -i '/secretName: cpi-engineering-secret/,/secretNamespace: kube-system/d' vsphere-cloud-controller-manager.yaml
+
+# Template parameters are customized 
+sed -i "s/10.0.0.1/$vcenter_ip/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/<ENTER_YOUR_VCENTER_USERNAME>/$csi_service_account@vsphere.local/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/<ENTER_YOUR_VCENTER_PASSWORD>/$csi_service_account_password/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/your-vcenter-name-here/$vcenter_name/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/use-your-vcenter-user-here/$csi_service_account@vsphere.local/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/use-your-vcenter-password-here/$csi_service_account_password/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/hrwest/$datacenter/g" vsphere-cloud-controller-manager.yaml
+
+# Nodes are temporaly taints until they are initialized
+for i in "${nodes[@]}"
+do
+    kubectl taint node $i node.cloudprovider.kubernetes.io/uninitialized=true:NoSchedule
+done
+# cpi is installed
+kubectl delete daemonset.apps/vsphere-cloud-controller-manager -n kube-system
+kubectl apply -f vsphere-cloud-controller-manager.yaml
+# During the process,, taints are automatically removed
+# yaml file used for creating cpi is removed
+rm vsphere-cloud-controller-manager.yaml             
+
+# cpi checking
+# kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager
+# kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager | awk '{print $1}' | xargs kubectl logs -n kube-system | grep "Successfully initialized node"
