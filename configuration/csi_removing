@@ -1,0 +1,8 @@
+# !/bin/bash
+# CSI Installation – CSI removing from cluster
+# Version : December 25, 2023
+# Author : mariefdu45@gmail.com
+#
+# Remove vmware-system-csi namespace and its content
+kubectl  delete ns vmware-system-csi
+

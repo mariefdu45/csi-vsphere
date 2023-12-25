@@ -3,16 +3,16 @@
 # Version : December 24, 2023
 # mariefdu45@gmail.com
 #
-# Création d’un utilisateur
+# Service Account for CSI and CPI creation
 govc sso.user.create -p $csi_service_account_password $csi_service_account
 
-# Création des rôles
+# Roles creation
 govc role.create CNS-Datastore Datastore.FileManagement 
 govc role.create CNS-HOST-CONFIG-STORAGE Host.Config.Storage
 govc role.create CNS-SEARCH-AND-SPBM Cns.Searchable StorageProfile.View
 govc role.create CNS-VM VirtualMachine.Config.AddExistingDisk VirtualMachine.Config.AddRemoveDevice
 
-# Création des permissions pour l’utilisateur
+# Permissions for Service Account creation
 govc permissions.set -principal $csi_service_account@vsphere.local \
     -role CNS-Datastore -propagate=false /$datacenter/datastore/$datastore
 

@@ -1,0 +1,33 @@
+# !/bin/bash
+# CSI removing – Service account removing
+# Version : December 25, 2023
+# mariefdu45@gmail.com
+#
+
+
+# Permissions removing
+govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/datastore/$datastore
+govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/host/$cluster
+for i in "${nodes[@]}"
+do
+    govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/vm/$nodes_folder/$i
+done
+
+govc permissions.remove -principal $csi_service_account@vsphere.local /
+govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/datastore/$datastore
+for i in "${hosts[@]}"
+do
+    govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/host/$cluster/$i.$domain_name
+done
+govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter
+
+# Roles removing
+govc role.remove CNS-Datastore
+govc role.remove CNS-HOST-CONFIG-STORAGE
+govc role.remove CNS-SEARCH-AND-SPBM
+govc role.remove CNS-VM
+
+# Service account removing
+govc sso.user.rm $csi_service_account
+
+

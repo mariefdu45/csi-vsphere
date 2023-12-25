@@ -1,0 +1,12 @@
+# !/bin/bash
+# CSI removing – CPI removing from cluster
+# Version : December 25, 2023
+# Author : mariefdu45@gmail.com
+#
+# cpi and its secret are removed
+kubectl delete daemonset.apps/vsphere-cloud-controller-manager -n kube-system
+kubectl delete secret vsphere-cloud-secret -n kube-system
+
+# cpi checking
+# kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager
+# kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager | awk '{print $1}' | xargs kubectl logs -n kube-system | grep "Successfully initialized node"
