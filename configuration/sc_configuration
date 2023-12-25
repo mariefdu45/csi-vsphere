@@ -1,0 +1,21 @@
+# !/bin/bash
+# CSI Installation – Storage Class using csi VSphere creation
+# Version : December 25, 2023
+# mariefdu45@gmail.com
+#
+datastoreurl=$(govc ls -json /Bordeaux/datastore/vsanDatastore | jq '.elements[0].Object.info.url')
+
+
+kubectl apply -f - <<EOF
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: vsphere-sc
+  annotations:
+     storageclass.kubernetes.io/is-default-class: "true"
+provisioner: csi.vsphere.vmware.com
+parameters:
+  #datastoreurl: "ds:///vmfs/volumes/vsan:527e16fa27bbef3d-0d1c1e01c7ba6e33/"
+  datastoreurl: $datastoreurl
+  fsType: ext4
+EOF

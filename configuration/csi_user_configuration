@@ -29,14 +29,13 @@ done
 govc permissions.set -principal $csi_service_account@vsphere.local \
     -role CNS-SEARCH-AND-SPBM -propagate=false /
 
-govc permissions.set -principal $csi_service_account@vsphere.local \
-    -role ReadOnly -propagate=false /$datacenter/datastore/$datastore
 
 for i in "${hosts[@]}"
 do
   govc permissions.set -principal $csi_service_account@vsphere.local \
     -role ReadOnly -propagate=false /$datacenter/host/$cluster/$i.$domain_name
 done
+
 govc permissions.set -principal $csi_service_account@vsphere.local -role ReadOnly -propagate=false /$datacenter
 
 # enable disk.enableUUID

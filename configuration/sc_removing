@@ -1,0 +1,7 @@
+# !/bin/bash
+# CSI Removing – Removing Storage Class using csi VSphere 
+# Version : December 25, 2023
+# mariefdu45@gmail.com
+#
+#
+kubectl delete sc vsphere-sc

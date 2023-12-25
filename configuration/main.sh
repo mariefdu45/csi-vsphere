@@ -11,11 +11,13 @@ then
     source ./configuration/csi_user_configuration
     source ./configuration/cpi_configuration
     source ./configuration/csi_configuration
+    source ./configuration/sc_configuration
 elif [[ $1 == "uninstall" ]] 
 then
     source ./configuration/csi_removing
     source ./configuration/cpi_removing
 	source ./configuration/csi_user_removing
+    source ./configuration/sc_removing
 else
     echo "Error. Usage: main.sh install|uninstall"
 fi
