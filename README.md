@@ -74,7 +74,14 @@ kubectl get storageclasses
 ```
 ![image](https://github.com/mariefdu45/csi-vsphere/assets/96368239/ec074ea5-8ff1-4e4c-9ee3-838b35fba13d)
 
-### Removing
+### Using CSI
+```bash
+kubectl apply -f examples/pvc-pod_using_sc
+kubectl get pvc,pv,pod
+```
+![image](https://github.com/mariefdu45/csi-vsphere/assets/96368239/70520d93-24b4-4dff-af50-dc234a90758c)
+
+### Removing pod, pv and pvc, SC, CSI and CPI 
 
 ```bash
 ./configuration/main.sh uninstall
