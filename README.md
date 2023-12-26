@@ -24,7 +24,7 @@ On another side, VMware with VSphere 6.7 annouced CNS (VMware Cloud Native Stora
 - A running kubernetes cluster with nodes as virtual machines on VSphere.
 - Linux workstation with kubectl, git and govc for managing VSphere
 
-### Installation
+### CPI and CSI Installation
 ```bash
 # Get repository
 git clone https://github.com/mariefdu45/csi-vsphere.git
@@ -41,7 +41,7 @@ source ./variables.env
 ./configuration/main.sh install
 ```
 
-### CPI testing
+### CPI checking
 ```bash
 kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager
 ```
@@ -52,7 +52,7 @@ kubectl get pods -n kube-system | grep vsphere-cloud-controller-manager | awk '{
 ![image](https://github.com/mariefdu45/csi-vsphere/assets/96368239/16bca8af-cda2-48c5-98cd-cf049d3425ae)
 
 
-### CSI testing
+### CSI checking
 ```bash
 kubectl get secret,all -n vmware-system-csi
 ```
