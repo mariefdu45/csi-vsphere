@@ -17,7 +17,7 @@ cat >csi-vsphere.conf <<EOF
 #thumbprint = "<cert thumbprint>" # optional, use with insecure-flag set to false without providing ca-file
 [VirtualCenter "$vcenter_ip"]
 insecure-flag = "true"
-user = "$csi_service_account@vsphere.local"
+user = "$csi_service_account@$vCenter_Single_SignOn_Domain"
 password = "$csi_service_account_password"
 port = "443"
 datacenters = "$datacenter"

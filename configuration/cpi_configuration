@@ -15,10 +15,10 @@ sed -i '/secretName: cpi-engineering-secret/,/secretNamespace: kube-system/d' vs
 
 # Template parameters are customized 
 sed -i "s/10.0.0.1/$vcenter_ip/g" vsphere-cloud-controller-manager.yaml
-sed -i "s/<ENTER_YOUR_VCENTER_USERNAME>/$csi_service_account@vsphere.local/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/<ENTER_YOUR_VCENTER_USERNAME>/$csi_service_account@/g" vsphere-cloud-controller-manager.yaml
 sed -i "s/<ENTER_YOUR_VCENTER_PASSWORD>/$csi_service_account_password/g" vsphere-cloud-controller-manager.yaml
 sed -i "s/your-vcenter-name-here/$vcenter_name/g" vsphere-cloud-controller-manager.yaml
-sed -i "s/use-your-vcenter-user-here/$csi_service_account@vsphere.local/g" vsphere-cloud-controller-manager.yaml
+sed -i "s/use-your-vcenter-user-here/$csi_service_account@$vCenter_Single_SignOn_Domain/g" vsphere-cloud-controller-manager.yaml
 sed -i "s/use-your-vcenter-password-here/$csi_service_account_password/g" vsphere-cloud-controller-manager.yaml
 sed -i "s/hrwest/$datacenter/g" vsphere-cloud-controller-manager.yaml
 

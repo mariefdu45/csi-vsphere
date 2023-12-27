@@ -6,20 +6,20 @@
 
 
 # Permissions removing
-govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/datastore/$datastore
-govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/host/$cluster
+govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter/datastore/$datastore
+govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter/host/$cluster
 for i in "${nodes[@]}"
 do
-    govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/vm/$nodes_folder/$i
+    govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter/vm/$nodes_folder/$i
 done
 
-govc permissions.remove -principal $csi_service_account@vsphere.local /
-govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/datastore/$datastore
+govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /
+govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter/datastore/$datastore
 for i in "${hosts[@]}"
 do
-    govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter/host/$cluster/$i.$domain_name
+    govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter/host/$cluster/$i.$dns_domain_name
 done
-govc permissions.remove -principal $csi_service_account@vsphere.local /$datacenter
+govc permissions.remove -principal $csi_service_account@$vCenter_Single_SignOn_Domain /$datacenter
 
 # Roles removing
 govc role.remove CNS-Datastore

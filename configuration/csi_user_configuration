@@ -13,30 +13,30 @@ govc role.create CNS-SEARCH-AND-SPBM Cns.Searchable StorageProfile.View
 govc role.create CNS-VM VirtualMachine.Config.AddExistingDisk VirtualMachine.Config.AddRemoveDevice
 
 # Permissions for Service Account creation
-govc permissions.set -principal $csi_service_account@vsphere.local \
+govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain \
     -role CNS-Datastore -propagate=false /$datacenter/datastore/$datastore
 
-govc permissions.set -principal $csi_service_account@vsphere.local \
+govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain \
     -role CNS-HOST-CONFIG-STORAGE -propagate=false /$datacenter/host/$cluster
 
 
 for i in "${nodes[@]}"
 do
-    govc permissions.set -principal $csi_service_account@vsphere.local -role CNS-VM -propagate=false /$datacenter/vm/$nodes_folder/$i
+    govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain -role CNS-VM -propagate=false /$datacenter/vm/$nodes_folder/$i
 done
 
 
-govc permissions.set -principal $csi_service_account@vsphere.local \
+govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain \
     -role CNS-SEARCH-AND-SPBM -propagate=false /
 
 
 for i in "${hosts[@]}"
 do
-  govc permissions.set -principal $csi_service_account@vsphere.local \
-    -role ReadOnly -propagate=false /$datacenter/host/$cluster/$i.$domain_name
+  govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain \
+    -role ReadOnly -propagate=false /$datacenter/host/$cluster/$i.$dns_domain_name
 done
 
-govc permissions.set -principal $csi_service_account@vsphere.local -role ReadOnly -propagate=false /$datacenter
+govc permissions.set -principal $csi_service_account@$vCenter_Single_SignOn_Domain -role ReadOnly -propagate=false /$datacenter
 
 # enable disk.enableUUID
 for i in "${nodes[@]}"
