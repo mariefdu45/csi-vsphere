@@ -21,7 +21,7 @@ On another side, started with VSphere 6.7, VMWare provided CNS (VMware Cloud Nat
 <img align="right" src="https://github.com/mariefdu45/csi-vsphere/assets/96368239/1e5fdd77-e92a-4cb3-bc48-8a09d2588a8a"  width="600"/>
 
 
-## Installating on your cluster
+## Installing on your cluster
 ### Prerequisite
 - A running kubernetes cluster with nodes as virtual machines on VSphere.
 - Linux workstation with kubectl, git and govc for managing VSphere
